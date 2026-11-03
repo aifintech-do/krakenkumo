@@ -1,4 +1,4 @@
-# krakenkumo — Kraken Spot WebSocket API v2 market-data consumer.
+# krakentool — Kraken Spot WebSocket API v2 market-data consumer.
 # Copyright (C) 2026 aifintech-do
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
@@ -36,7 +36,7 @@ import urllib.request
 from pathlib import Path
 from typing import Mapping
 
-from krakenkumo.protocol import REST_URL
+from krakentool.protocol import REST_URL
 
 TOKEN_PATH = "/0/private/GetWebSocketsToken"
 
@@ -140,7 +140,7 @@ def _fetch_websocket_token(
             "API-Key": api_key,
             "API-Sign": signature,
             "Content-Type": "application/x-www-form-urlencoded",
-            "User-Agent": "krakenkumo",
+            "User-Agent": "krakentool",
         },
     )
     open_url = opener.open if opener is not None else urllib.request.urlopen

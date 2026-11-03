@@ -1,4 +1,4 @@
-# krakenkumo — Kraken Spot WebSocket API v2 market-data consumer.
+# krakentool — Kraken Spot WebSocket API v2 market-data consumer.
 # Copyright (C) 2026 aifintech-do
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from krakenkumo.cli import main
+from krakentool.cli import main
 
 if __name__ == "__main__":
     raise SystemExit(main())

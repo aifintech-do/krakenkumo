@@ -1,4 +1,4 @@
-# krakenkumo — Kraken Spot WebSocket API v2 market-data consumer.
+# krakentool — Kraken Spot WebSocket API v2 market-data consumer.
 # Copyright (C) 2026 aifintech-do
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
@@ -35,7 +35,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from krakenkumo.assets import asset_class
+from krakentool.assets import asset_class
 
 DAILY_MINUTES = 1440
 MINUTE_MINUTES = 1
@@ -401,11 +401,11 @@ def dataset_main(argv: list[str]) -> int:
     import logging
     import sys
 
-    from krakenkumo import LICENSE_EPILOG, VersionAction
-    from krakenkumo.protocol import normalize_symbols
+    from krakentool import LICENSE_EPILOG, VersionAction
+    from krakentool.protocol import normalize_symbols
 
     parser = argparse.ArgumentParser(
-        prog="krakenkumo dataset",
+        prog="krakentool dataset",
         description=(
             "Collect a backtesting dataset. Daily OHLC is paged with the "
             "response last cursor, then optional minute candles and trade "
@@ -444,7 +444,7 @@ def dataset_main(argv: list[str]) -> int:
         runner = kraken_runner()
         built = []
         for symbol in symbols:
-            logging.getLogger("krakenkumo").info("collecting %s", symbol)
+            logging.getLogger("krakentool").info("collecting %s", symbol)
             built.append(
                 build_symbol(
                     runner,
@@ -472,7 +472,7 @@ def dataset_main(argv: list[str]) -> int:
         return 1
     print(manifest)
     for item in built:
-        logging.getLogger("krakenkumo").info(
+        logging.getLogger("krakentool").info(
             "%s daily=%d minute=%d trades=%d vwap_failed=%d",
             item["symbol"],
             len(item["daily"]),

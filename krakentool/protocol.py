@@ -1,4 +1,4 @@
-# krakenkumo — Kraken Spot WebSocket API v2 market-data consumer.
+# krakentool — Kraken Spot WebSocket API v2 market-data consumer.
 # Copyright (C) 2026 aifintech-do
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
@@ -27,7 +27,7 @@ from __future__ import annotations
 
 from typing import Any, Iterable
 
-from krakenkumo.assets import asset_class, parse_symbol
+from krakentool.assets import asset_class, parse_symbol
 
 PUBLIC_WS_URL = "wss://ws.kraken.com/v2"
 AUTH_WS_URL = "wss://ws-auth.kraken.com/v2"

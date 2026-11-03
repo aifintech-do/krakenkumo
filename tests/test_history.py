@@ -1,4 +1,4 @@
-# krakenkumo — Kraken Spot WebSocket API v2 market-data consumer.
+# krakentool — Kraken Spot WebSocket API v2 market-data consumer.
 # Copyright (C) 2026 aifintech-do
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
@@ -23,8 +23,8 @@ from urllib.request import Request
 
 import websockets
 
-from krakenkumo.credentials import CredentialsError, fetch_websocket_token, load_credentials
-from krakenkumo.history import (
+from krakentool.credentials import CredentialsError, fetch_websocket_token, load_credentials
+from krakentool.history import (
     HistoryError,
     execution_events,
     executions_subscribe,

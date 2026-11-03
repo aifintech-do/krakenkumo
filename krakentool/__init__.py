@@ -1,4 +1,4 @@
-# krakenkumo — Kraken Spot WebSocket API v2 market-data consumer.
+# krakentool — Kraken Spot WebSocket API v2 market-data consumer.
 # Copyright (C) 2026 aifintech-do
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
@@ -24,7 +24,7 @@ __copyright__ = "Copyright (C) 2026 aifintech-do"
 __license__ = "GPL-3.0-or-later"
 
 VERSION_BANNER = (
-    f"krakenkumo {__version__}\n"
+    f"krakentool {__version__}\n"
     f"{__copyright__}\n"
     "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>.\n"
     "This is free software: you are free to change and redistribute it.\n"

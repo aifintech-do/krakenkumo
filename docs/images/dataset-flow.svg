@@ -1,7 +1,7 @@
 <!-- Copyright (C) 2026 aifintech-do. SPDX-License-Identifier: GPL-3.0-or-later. See LICENSE. -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 860" role="img" aria-labelledby="flowTitle flowDesc">
   <title id="flowTitle">Backtesting dataset flow</title>
-  <desc id="flowDesc">krakenkumo dataset pages daily OHLC, optional minute candles, and optional trade ticks, applies a gap policy, checks tick VWAP, then writes JSONL files.</desc>
+  <desc id="flowDesc">krakentool dataset pages daily OHLC, optional minute candles, and optional trade ticks, applies a gap policy, checks tick VWAP, then writes JSONL files.</desc>
   <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
       <path d="M0 0 L10 5 L0 10 Z" fill="#3d4a57"/>
@@ -24,7 +24,7 @@
   <text class="muted" x="32" y="64" font-size="13">Public OHLC and trades. No WebSocket and no API key.</text>
 
   <rect class="card" x="250" y="86" width="460" height="78" rx="12"/>
-  <text class="ink" x="480" y="116" font-size="15" font-weight="650" text-anchor="middle">krakenkumo dataset</text>
+  <text class="ink" x="480" y="116" font-size="15" font-weight="650" text-anchor="middle">krakentool dataset</text>
   <text class="muted" x="480" y="140" font-size="12.5" text-anchor="middle">symbols, --start, --end, drill window, --gaps</text>
 
   <path class="line" marker-end="url(#arrow)" d="M480 164 L480 198"/>

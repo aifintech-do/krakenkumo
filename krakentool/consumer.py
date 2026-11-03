@@ -1,4 +1,4 @@
-# krakenkumo — Kraken Spot WebSocket API v2 market-data consumer.
+# krakentool — Kraken Spot WebSocket API v2 market-data consumer.
 # Copyright (C) 2026 aifintech-do
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
@@ -29,7 +29,7 @@ from typing import Any
 import websockets
 from websockets.exceptions import ConnectionClosed
 
-from krakenkumo.protocol import (
+from krakentool.protocol import (
     L3_WS_URL,
     PUBLIC_WS_URL,
     build_subscriptions,
@@ -40,7 +40,7 @@ from krakenkumo.protocol import (
 
 TokenFactory = Callable[[], str]
 
-log = logging.getLogger("krakenkumo")
+log = logging.getLogger("krakentool")
 
 Emit = Callable[[dict[str, Any]], None]
 

@@ -1,4 +1,4 @@
-# krakenkumo — Kraken Spot WebSocket API v2 market-data consumer.
+# krakentool — Kraken Spot WebSocket API v2 market-data consumer.
 # Copyright (C) 2026 aifintech-do
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
@@ -27,18 +27,18 @@ import signal
 import sys
 from typing import Any, TextIO
 
-from krakenkumo import LICENSE_EPILOG, VersionAction
-from krakenkumo.assets import asset_class
-from krakenkumo.consumer import MarketDataConsumer
-from krakenkumo.history import (
+from krakentool import LICENSE_EPILOG, VersionAction
+from krakentool.assets import asset_class
+from krakentool.consumer import MarketDataConsumer
+from krakentool.history import (
     HistoryError,
     account_token,
     format_history_text,
     stream_executions,
     to_v2_symbol,
 )
-from krakenkumo.protocol import AUTH_WS_URL as _AUTH_WS_URL
-from krakenkumo.protocol import (
+from krakentool.protocol import AUTH_WS_URL as _AUTH_WS_URL
+from krakentool.protocol import (
     BOOK_DEPTHS,
     EVENT_TRIGGERS,
     L3_DEPTHS,
@@ -121,7 +121,7 @@ def _num(value: Any) -> str:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="krakenkumo",
+        prog="krakentool",
         description=(
             "Consume Kraken Spot WebSocket API v2 market data. "
             "Crypto and forex share a socket. level3 is the authenticated "
@@ -222,7 +222,7 @@ def main(argv: list[str] | None = None, out: TextIO | None = None) -> int:
     if args_list and args_list[0] == "history":
         return history_main(args_list[1:], out)
     if args_list and args_list[0] == "dataset":
-        from krakenkumo.dataset import dataset_main
+        from krakentool.dataset import dataset_main
 
         return dataset_main(args_list[1:])
     args = build_parser().parse_args(args_list)
@@ -256,7 +256,7 @@ def main(argv: list[str] | None = None, out: TextIO | None = None) -> int:
         return 2
 
     classes = {asset_class(symbol) for symbol in symbols}
-    logging.getLogger("krakenkumo").info(
+    logging.getLogger("krakentool").info(
         "watching %s (%s)",
         " ".join(symbols),
         ", ".join(sorted(classes)),
@@ -304,15 +304,15 @@ async def _run(
             max_messages=max_messages,
         )
     except Exception as exc:
-        logging.getLogger("krakenkumo").error("%s", exc)
+        logging.getLogger("krakentool").error("%s", exc)
         return 1
-    logging.getLogger("krakenkumo").info("stopped after %d market events", count)
+    logging.getLogger("krakentool").info("stopped after %d market events", count)
     return 0
 
 
 def history_main(argv: list[str], out: TextIO | None = None) -> int:
     parser = argparse.ArgumentParser(
-        prog="krakenkumo history",
+        prog="krakentool history",
         description=(
             "Your Kraken spot fills and orders over the authenticated "
             "WebSocket v2 executions channel. The snapshot is open orders "
@@ -391,7 +391,7 @@ def history_main(argv: list[str], out: TextIO | None = None) -> int:
     except HistoryError as exc:
         print(str(exc), file=sys.stderr)
         return 1
-    logging.getLogger("krakenkumo").info("wrote %d account events", count)
+    logging.getLogger("krakentool").info("wrote %d account events", count)
     return 0
 
 
@@ -422,7 +422,7 @@ async def _history_run(
         print(line, file=out, flush=True)
 
     token = account_token()
-    logging.getLogger("krakenkumo").info(
+    logging.getLogger("krakentool").info(
         "executions %s snap_orders=%s snap_trades=%s",
         url,
         snap_orders,

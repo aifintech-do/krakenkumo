@@ -1,7 +1,7 @@
 <!-- Copyright (C) 2026 aifintech-do. SPDX-License-Identifier: GPL-3.0-or-later. See LICENSE. -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 1120" role="img" aria-labelledby="seqTitle seqDesc">
   <title id="seqTitle">Backtesting dataset sequence</title>
-  <desc id="seqDesc">Sequence from krakenkumo dataset through the kraken CLI to public OHLC and Trades, then gap handling and the VWAP check.</desc>
+  <desc id="seqDesc">Sequence from krakentool dataset through the kraken CLI to public OHLC and Trades, then gap handling and the VWAP check.</desc>
   <defs>
     <marker id="seqArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto">
       <path d="M0 1 L9 5 L0 9 Z" fill="#1b2430"/>
@@ -26,7 +26,7 @@
   <rect x="48" y="88" width="120" height="40" rx="8" fill="#1b2430"/>
   <text x="108" y="113" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="650" font-family="Segoe UI, Helvetica, Arial, sans-serif">You</text>
   <rect x="250" y="88" width="160" height="40" rx="8" fill="#0f6e56"/>
-  <text x="330" y="113" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="650" font-family="Segoe UI, Helvetica, Arial, sans-serif">krakenkumo</text>
+  <text x="330" y="113" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="650" font-family="Segoe UI, Helvetica, Arial, sans-serif">krakentool</text>
   <rect x="490" y="88" width="140" height="40" rx="8" fill="#1a4f8b"/>
   <text x="560" y="113" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="650" font-family="Segoe UI, Helvetica, Arial, sans-serif">kraken CLI</text>
   <rect x="760" y="88" width="220" height="40" rx="8" fill="#3d4a57"/>

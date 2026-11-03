@@ -1,4 +1,4 @@
-# krakenkumo — Kraken Spot WebSocket API v2 market-data consumer.
+# krakentool — Kraken Spot WebSocket API v2 market-data consumer.
 # Copyright (C) 2026 aifintech-do
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
@@ -32,9 +32,9 @@ from typing import Any
 
 import websockets
 
-from krakenkumo.assets import asset_class
-from krakenkumo.credentials import CredentialsError, fetch_websocket_token, load_credentials
-from krakenkumo.protocol import AUTH_WS_URL
+from krakentool.assets import asset_class
+from krakentool.credentials import CredentialsError, fetch_websocket_token, load_credentials
+from krakentool.protocol import AUTH_WS_URL
 
 Emit = Callable[[dict[str, Any]], None]
 

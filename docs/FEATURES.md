@@ -1,17 +1,17 @@
-# krakenkumo
+# krakentool
 
 ## Introduction
 
 [Kraken Spot](https://docs.kraken.com/exchange/api-reference/spot-websocket) is a public market plus an account API, so the same venue can feed a monitor, a research notebook, or a trading application. Public channels publish ticker, trades, the aggregated book, and candles for crypto and forex on one symbol format (`BTC/USD`, `EUR/USD`). Private channels and order entry use an API key. WebSocket API v2 is the current interface: normalised JSON, `BTC/USD` symbols, and both market data and order messages on a persistent connection.
 
-krakenkumo is a baseline on that API. It follows the live book, records your own fills and open orders, and builds a checked historical dataset you can replay before a strategy sends an order. A trading application keeps this layer and adds order entry from the same v2 catalog (`add_order`, `amend_order`, `cancel_order`), documented in the [Spot WebSocket reference](https://docs.kraken.com/exchange/api-reference/spot-websocket).
+krakentool is a baseline on that API. It follows the live book, records your own fills and open orders, and builds a checked historical dataset you can replay before a strategy sends an order. A trading application keeps this layer and adds order entry from the same v2 catalog (`add_order`, `amend_order`, `cancel_order`), documented in the [Spot WebSocket reference](https://docs.kraken.com/exchange/api-reference/spot-websocket).
 
 | Layer | What it gives a trading app | In this project |
 | --- | --- | --- |
-| Public market data | Quotes, prints, level 2 book, candles | `krakenkumo` on `wss://ws.kraken.com/v2` |
-| Your account | Open orders and recent fills, then live updates | `krakenkumo history` on `wss://ws-auth.kraken.com/v2` |
+| Public market data | Quotes, prints, level 2 book, candles | `krakentool` on `wss://ws.kraken.com/v2` |
+| Your account | Open orders and recent fills, then live updates | `krakentool history` on `wss://ws-auth.kraken.com/v2` |
 | Level 3 book | Each resting order, for queue and microstructure work | `--channels level3` on `wss://ws-l3.kraken.com/v2` |
-| History | Daily and minute bars, trade ticks, a VWAP check | `krakenkumo dataset` |
+| History | Daily and minute bars, trade ticks, a VWAP check | `krakentool dataset` |
 | Order entry | Place, amend, and cancel | [Spot WebSocket v2 order methods](https://docs.kraken.com/exchange/api-reference/spot-websocket) |
 
 ### API key and secret
@@ -19,7 +19,7 @@ krakenkumo is a baseline on that API. It follows the live book, records your own
 Public market data needs no key. Level 3, your executions, and any later order call need a key pair from Kraken Pro.
 
 1. Sign in to Kraken Pro, open the profile menu, and choose **Settings**, then **API**.
-2. Choose **Create API key**. The description is the key’s name. Give it a name you will recognise, such as `krakenkumo`.
+2. Choose **Create API key**. The description is the key’s name. Give it a name you will recognise, such as `krakentool`.
 3. Turn on **Access WebSockets API** (also shown as the WebSocket interface). That permission is what allows [`GetWebSocketsToken`](https://docs.kraken.com/api-reference/trading/get-websockets-token). Level 3 and `history` both use that token.
 4. For a read-only baseline, also turn on **Query Open Orders & Trades**. Leave **Withdraw Funds** off. Turn on **Modify Orders** and **Cancel/Close Orders** when the application places and cancels orders. The full matrix is in [API key permissions](https://docs.kraken.com/exchange/guides/rest/api-keys).
 5. Restrict the key to the IP addresses of the machine that will call the API, then choose **Generate key**.
@@ -33,7 +33,7 @@ export KRAKEN_API_KEY="the public key"
 export KRAKEN_API_SECRET="the private key"
 ```
 
-krakenkumo calls `GetWebSocketsToken`, then puts that token in the subscribe message. See [Spot WebSocket authentication](https://docs.kraken.com/exchange/guides/websockets/authentication).
+krakentool calls `GetWebSocketsToken`, then puts that token in the subscribe message. See [Spot WebSocket authentication](https://docs.kraken.com/exchange/guides/websockets/authentication).
 
 ### Kraken documentation
 
@@ -49,12 +49,12 @@ krakenkumo calls `GetWebSocketsToken`, then puts that token in the subscribe mes
 
 ## Get started
 
-You need Python 3.11 or newer and [uv](https://docs.astral.sh/uv/getting-started/installation/). Runtime dependencies are declared in `pyproject.toml` and pinned in [`uv.lock`](../uv.lock). That lockfile is the install list: today it is this package plus `websockets` 15.0.1. `uv sync` creates `.venv` from the lockfile and installs the `krakenkumo` command into it.
+You need Python 3.11 or newer and [uv](https://docs.astral.sh/uv/getting-started/installation/). Runtime dependencies are declared in `pyproject.toml` and pinned in [`uv.lock`](../uv.lock). That lockfile is the install list: today it is this package plus `websockets` 15.0.1. `uv sync` creates `.venv` from the lockfile and installs the `krakentool` command into it.
 
 ```bash
 uv sync
-uv run krakenkumo --help
-uv run krakenkumo BTC/USD EUR/USD --channels ticker,trade --duration 10
+uv run krakentool --help
+uv run krakentool BTC/USD EUR/USD --channels ticker,trade --duration 10
 ```
 
 Public ticker, trades, book, and OHLC need no API key. Level 3 and `history` mint a WebSocket token from `KRAKEN_API_KEY` and `KRAKEN_API_SECRET`, or from the key stored by `kraken auth login`. The `dataset` command shells out to the `kraken` CLI, which is a separate install and must be on `PATH`. The program is licensed under GPL-3.0-or-later; see [License](#license).
@@ -65,10 +65,10 @@ More commands are in [Sample commands](#sample-commands).
 
 | Command | What you get | Transport |
 | --- | --- | --- |
-| `krakenkumo` | Live ticker, trades, aggregated book, and OHLC | `wss://ws.kraken.com/v2` |
-| `krakenkumo --channels level3` | Per-order book (add, modify, delete) | `wss://ws-l3.kraken.com/v2` |
-| `krakenkumo history` | Your open orders and latest fills, then live updates with `--follow` | `wss://ws-auth.kraken.com/v2` |
-| `krakenkumo dataset` | Daily OHLC, optional minute bars and trade ticks, VWAP check, gap policy | Public REST, paged on `last` |
+| `krakentool` | Live ticker, trades, aggregated book, and OHLC | `wss://ws.kraken.com/v2` |
+| `krakentool --channels level3` | Per-order book (add, modify, delete) | `wss://ws-l3.kraken.com/v2` |
+| `krakentool history` | Your open orders and latest fills, then live updates with `--follow` | `wss://ws-auth.kraken.com/v2` |
+| `krakentool dataset` | Daily OHLC, optional minute bars and trade ticks, VWAP check, gap policy | Public REST, paged on `last` |
 
 A pair is `forex` when both legs are fiat (`EUR/USD`, `USD/JPY`). Anything else, including `BTC/USD` and `USDT/USD`, is `crypto`. Every market event carries that tag.
 
@@ -76,7 +76,7 @@ A pair is `forex` when both legs are fiat (`EUR/USD`, `USD/JPY`). Anything else,
 
 ```mermaid
 flowchart TD
-  cli["krakenkumo"]
+  cli["krakentool"]
   cli --> stream["Live market data"]
   cli --> history["Your executions"]
   cli --> dataset["Backtest dataset"]
@@ -105,10 +105,10 @@ Default symbols are `BTC/USD`, `ETH/USD`, `SOL/USD`, `EUR/USD`, `GBP/USD`, and `
 ```mermaid
 sequenceDiagram
   actor User
-  participant CLI as krakenkumo
+  participant CLI as krakentool
   participant WS as ws.kraken.com/v2
 
-  User->>CLI: krakenkumo BTC/USD EUR/USD --channels ticker,trade
+  User->>CLI: krakentool BTC/USD EUR/USD --channels ticker,trade
   CLI->>WS: connect
   WS-->>CLI: status api_version v2
   CLI->>WS: subscribe ticker symbol BTC/USD, EUR/USD event_trigger bbo
@@ -132,7 +132,7 @@ Level 3 shows each resting order: `order_id`, `limit_price`, and `order_qty`. A 
 ```mermaid
 sequenceDiagram
   actor User
-  participant CLI as krakenkumo
+  participant CLI as krakentool
   participant REST as api.kraken.com
   participant L3 as ws-l3.kraken.com/v2
 
@@ -160,7 +160,7 @@ The token is sent only inside the subscribe message. It is not logged.
 ```mermaid
 sequenceDiagram
   actor User
-  participant CLI as krakenkumo history
+  participant CLI as krakentool history
   participant REST as api.kraken.com
   participant WS as ws-auth.kraken.com/v2
 
@@ -182,7 +182,7 @@ A fill (`exec_type` `trade`) becomes `own_trade` with price, size, fee, and whet
 
 ## Backtesting dataset
 
-`krakenkumo dataset` builds an offline series for a backtest. It reads public OHLC and public trades through the `kraken` CLI. It does not open a WebSocket, and it does not use an API key.
+`krakentool dataset` builds an offline series for a backtest. It reads public OHLC and public trades through the `kraken` CLI. It does not open a WebSocket, and it does not use an API key.
 
 Daily candles cover the long window. Minute candles and trade ticks are optional and share a shorter drill window. Kraken returns at most 720 OHLC points for one interval, so a minute series only reaches about the last 12 hours. Keep the drill window inside that.
 
@@ -203,9 +203,9 @@ A forex symbol, both legs fiat, adds `--asset-class forex` on every `kraken` cal
 
 ### Sequence
 
-![Sequence of a dataset run between you, krakenkumo, the kraken CLI, and Kraken public REST](images/dataset-sequence.svg)
+![Sequence of a dataset run between you, krakentool, the kraken CLI, and Kraken public REST](images/dataset-sequence.svg)
 
-`krakenkumo` runs `kraken -o json --log-format compact` and reads one JSON object from stdout. The CLI calls public OHLC or Trades. A pause, 0.25 seconds by default, sits between pages. Daily paging is shown in full. Minute candles and trade ticks use that same `last` loop when those flags are set. After the pages, the process dedupes, applies the gap policy, checks tick VWAP against the candles, and prints the path to `manifest.json`.
+`krakentool` runs `kraken -o json --log-format compact` and reads one JSON object from stdout. The CLI calls public OHLC or Trades. A pause, 0.25 seconds by default, sits between pages. Daily paging is shown in full. Minute candles and trade ticks use that same `last` loop when those flags are set. After the pages, the process dedupes, applies the gap policy, checks tick VWAP against the candles, and prints the path to `manifest.json`.
 
 ### Files
 
@@ -227,13 +227,13 @@ These assume [Get started](#get-started) has been run, so `uv run` uses the envi
 Crypto and forex share one socket. The default set is `BTC/USD`, `ETH/USD`, `SOL/USD`, `EUR/USD`, `GBP/USD`, and `USD/JPY`, on the `ticker` channel, with quotes published when the best bid or offer changes.
 
 ```bash
-uv run krakenkumo
+uv run krakentool
 ```
 
 Ticker and trades for one crypto book and one forex book, printed as text for ten seconds:
 
 ```bash
-uv run krakenkumo BTC/USD EUR/USD \
+uv run krakentool BTC/USD EUR/USD \
   --channels ticker,trade \
   --format text \
   --duration 10
@@ -242,7 +242,7 @@ uv run krakenkumo BTC/USD EUR/USD \
 Publish the ticker on prints instead of quote changes, and stop after 20 events:
 
 ```bash
-uv run krakenkumo EUR/USD USD/JPY \
+uv run krakentool EUR/USD USD/JPY \
   --channels ticker \
   --event-trigger trades \
   --max-messages 20
@@ -251,7 +251,7 @@ uv run krakenkumo EUR/USD USD/JPY \
 Aggregated level 2 book, 25 levels per side, and one-minute candles. Heartbeats are not written to stdout. `--strict` exits if a symbol subscription is rejected. `--no-snapshot` waits for live updates.
 
 ```bash
-uv run krakenkumo BTC/USD GBP/USD \
+uv run krakentool BTC/USD GBP/USD \
   --channels book,ohlc \
   --book-depth 25 \
   --ohlc-interval 1 \
@@ -260,7 +260,7 @@ uv run krakenkumo BTC/USD GBP/USD \
 ```
 
 ```bash
-uv run krakenkumo SOL/USD --channels trade --no-snapshot --duration 10
+uv run krakentool SOL/USD --channels trade --no-snapshot --duration 10
 ```
 
 ### Level 3 order book
@@ -268,7 +268,7 @@ uv run krakenkumo SOL/USD --channels trade --no-snapshot --duration 10
 Level 3 is the per-order book. Depth is 10, 100, or 1000. It needs the same API key as `history`. The token is not printed.
 
 ```bash
-uv run krakenkumo BTC/USD EUR/USD \
+uv run krakentool BTC/USD EUR/USD \
   --channels level3 \
   --l3-depth 10 \
   --format text \
@@ -278,7 +278,7 @@ uv run krakenkumo BTC/USD EUR/USD \
 Public channels and level 3 cannot share a socket, so this opens both connections:
 
 ```bash
-uv run krakenkumo BTC/USD EUR/USD \
+uv run krakentool BTC/USD EUR/USD \
   --channels ticker,level3 \
   --l3-depth 10 \
   --duration 10
@@ -289,16 +289,16 @@ uv run krakenkumo BTC/USD EUR/USD \
 The snapshot is open orders plus the latest 50 fills. Older closed orders are not replayed. Credentials come from `KRAKEN_API_KEY` / `KRAKEN_API_SECRET` or from `kraken auth login`.
 
 ```bash
-uv run krakenkumo history
-uv run krakenkumo history --format text
+uv run krakentool history
+uv run krakentool history --format text
 ```
 
 Fills only, orders only, or the live feed after the snapshot. A symbol filter accepts v2 names (`BTC/USD`) and REST names (`XXBTZUSD`). `--no-open` skips the open-order snapshot.
 
 ```bash
-uv run krakenkumo history BTC/USD --trades
-uv run krakenkumo history --orders --no-open
-uv run krakenkumo history --follow --duration 30
+uv run krakentool history BTC/USD --trades
+uv run krakentool history --orders --no-open
+uv run krakentool history --follow --duration 30
 ```
 
 ### Backtesting dataset
@@ -308,7 +308,7 @@ Daily candles for the long window. Minute candles and trade ticks share the dril
 Daily bars only, for crypto and forex:
 
 ```bash
-uv run krakenkumo dataset BTC/USD EUR/USD \
+uv run krakentool dataset BTC/USD EUR/USD \
   --start 2026-10-30 --end 2026-11-01 \
   --gaps exclude \
   --out dataset
@@ -317,7 +317,7 @@ uv run krakenkumo dataset BTC/USD EUR/USD \
 Minute bars, trade ticks, and the VWAP check. Missing candles stay out of the series and are listed in `gaps.json`:
 
 ```bash
-uv run krakenkumo dataset BTC/USD EUR/USD \
+uv run krakentool dataset BTC/USD EUR/USD \
   --start 2026-10-30 --end 2026-11-01 \
   --drill-start 2026-11-01T01:56:00Z \
   --drill-end 2026-11-01T02:11:00Z \
@@ -332,7 +332,7 @@ uv run krakenkumo dataset BTC/USD EUR/USD \
 The same drill, with a hole filled by the previous close at zero volume:
 
 ```bash
-uv run krakenkumo dataset BTC/USD \
+uv run krakentool dataset BTC/USD \
   --start 2026-10-30 --end 2026-11-01 \
   --drill-start 2026-11-01T01:56:00Z \
   --drill-end 2026-11-01T02:11:00Z \
@@ -343,4 +343,4 @@ uv run krakenkumo dataset BTC/USD \
 
 ## License
 
-Copyright (C) 2026 aifintech-do. krakenkumo is free software under the GNU General Public License, version 3 or any later version, as published by the Free Software Foundation. The full text is [LICENSE](../LICENSE). There is no warranty. `krakenkumo --version` prints the short notice. Each source file carries the same copyright and license header.
+Copyright (C) 2026 aifintech-do. krakentool is free software under the GNU General Public License, version 3 or any later version, as published by the Free Software Foundation. The full text is [LICENSE](../LICENSE). There is no warranty. `krakentool --version` prints the short notice. Each source file carries the same copyright and license header.
